@@ -11,13 +11,23 @@ This package provides a reusable Go client for uploading files to the Ekilie Buc
 
 ## Installation
 
-Clone the repository and use Go modules to import the packages:
+You can use Go modules to install the package directly:
+
+```
+go get github.com/ekilie/bucket-go@v1.0.0
+```
+
+Or clone the repository:
 
 ```
 git clone https://github.com/ekilie/bucket-go.git
 cd bucket-go
 go mod tidy
 ```
+
+## Versioning
+
+This package uses semantic versioning. To use a specific release, specify the tag (e.g. `@v1.0.0`) with `go get`.
 
 ## Usage
 
