@@ -21,18 +21,26 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/ekilie/bucket-go/client"
+	"github.com/ekilie/bucket-go/model"
+	"github.com/ekilie/bucket-go/util"
 )
 
-// If baseURL is empty, it defaults to BaseURL.
-// ...existing code...
-
 // UploadFile uploads a file to the API and returns the response.
-func (c *Client) UploadFile(filePath string) (*UploadResponse, error) {
-	// ...existing code...
+func (c *client.Client) UploadFile(filePath string) (*model.UploadResponse, error) {
+	// Validate file existence and size
+	fileInfo, err := os.Stat(filePath)
+	if err != nil {
+		return nil, fmt.Errorf("failed to stat file: %w", err)
+	}
+	if fileInfo.Size() > util.MaxFileSize {
+		return nil, errors.New("file exceeds maximum size of 100MB")
+	}
 
 	// Validate extension
 	ext := strings.ToLower(filepath.Ext(filePath))
-	if !AllowedExtensions[ext] {
+	if !util.AllowedExtensions[ext] {
 		return nil, fmt.Errorf("unsupported file type: %s", ext)
 	}
 
@@ -66,7 +74,7 @@ func (c *Client) UploadFile(filePath string) (*UploadResponse, error) {
 	}
 
 	// Create request
-	url := c.BaseURL + Endpoint
+	url := c.BaseURL + util.Endpoint
 	req, err := http.NewRequest("POST", url, body)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create request: %w", err)
@@ -100,13 +108,13 @@ func (c *Client) UploadFile(filePath string) (*UploadResponse, error) {
 	}
 
 	if baseResp.Status == "success" {
-		var uploadResp UploadResponse
+		var uploadResp model.UploadResponse
 		if err := json.Unmarshal(respBody, &uploadResp); err != nil {
 			return nil, fmt.Errorf("failed to unmarshal success response: %w", err)
 		}
 		return &uploadResp, nil
 	} else if baseResp.Status == "error" {
-		var errResp ErrorResponse
+		var errResp model.ErrorResponse
 		if err := json.Unmarshal(respBody, &errResp); err != nil {
 			return nil, fmt.Errorf("failed to unmarshal error response: %w", err)
 		}
