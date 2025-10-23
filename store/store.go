@@ -27,8 +27,9 @@ import (
 	"github.com/ekilie/bucket-go/util"
 )
 
+
 // UploadFile uploads a file to the API and returns the response.
-func (c *client.Client) UploadFile(filePath string) (*model.UploadResponse, error) {
+func UploadFile(c *client.Client, filePath string) (*model.UploadResponse, error) {
 	// Validate file existence and size
 	fileInfo, err := os.Stat(filePath)
 	if err != nil {
@@ -107,13 +108,14 @@ func (c *client.Client) UploadFile(filePath string) (*model.UploadResponse, erro
 		return nil, fmt.Errorf("failed to unmarshal response: %w", err)
 	}
 
-	if baseResp.Status == "success" {
+	switch baseResp.Status {
+	case "success":
 		var uploadResp model.UploadResponse
 		if err := json.Unmarshal(respBody, &uploadResp); err != nil {
 			return nil, fmt.Errorf("failed to unmarshal success response: %w", err)
 		}
 		return &uploadResp, nil
-	} else if baseResp.Status == "error" {
+	case "error":
 		var errResp model.ErrorResponse
 		if err := json.Unmarshal(respBody, &errResp); err != nil {
 			return nil, fmt.Errorf("failed to unmarshal error response: %w", err)
