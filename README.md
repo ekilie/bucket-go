@@ -1,3 +1,33 @@
+## Response Structure
+
+The package returns structured responses for uploads:
+
+### Success Response (`model.UploadResponse`)
+
+```
+type UploadResponse struct {
+ Status   string   // "success"
+ URL      string   // Public URL of the uploaded file
+ Metadata Metadata // File details
+}
+
+type Metadata struct {
+ OriginalName string // Original file name
+ FileType     string // MIME type
+ FileSize     int64  // Size in bytes
+ UploadTime   string // ISO8601 timestamp
+}
+```
+
+### Error Response (`model.ErrorResponse`)
+
+```
+type ErrorResponse struct {
+ Status  string // "error"
+ Message string // Error message
+}
+```
+
 # Ekilie Bucket Go Client
 
 This package provides a reusable Go client for uploading files to the Ekilie Bucket API. It handles file validation, multipart uploads, and response parsing.
@@ -44,13 +74,13 @@ c := client.NewClient(apiKey)
 
 ```go
 import (
-	"github.com/ekilie/bucket-go/store"
-	"github.com/ekilie/bucket-go/client"
+ "github.com/ekilie/bucket-go/store"
+ "github.com/ekilie/bucket-go/client"
 )
 
 resp, err := store.UploadFile(c, "/path/to/file.jpg")
 if err != nil {
-	// handle error
+ // handle error
 }
 fmt.Println("File URL:", resp.URL)
 fmt.Printf("Metadata: %+v\n", resp.Metadata)
@@ -64,24 +94,24 @@ See `main.go` for a complete demo:
 package main
 
 import (
-	"fmt"
-	"os"
-	"github.com/ekilie/bucket-go/client"
-	"github.com/ekilie/bucket-go/store"
+ "fmt"
+ "os"
+ "github.com/ekilie/bucket-go/client"
+ "github.com/ekilie/bucket-go/store"
 )
 
 func main() {
-	apiKey := "your-api-key"
-	filePath := "sample.jpg"
+ apiKey := "your-api-key"
+ filePath := "sample.jpg"
 
-	c := client.NewClient(apiKey)
-	resp, err := store.UploadFile(c, filePath)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Upload failed: %v\n", err)
-		os.Exit(1)
-	}
-	fmt.Printf("File uploaded successfully! URL: %s\n", resp.URL)
-	fmt.Printf("Metadata: %+v\n", resp.Metadata)
+ c := client.NewClient(apiKey)
+ resp, err := store.UploadFile(c, filePath)
+ if err != nil {
+  fmt.Fprintf(os.Stderr, "Upload failed: %v\n", err)
+  os.Exit(1)
+ }
+ fmt.Printf("File uploaded successfully! URL: %s\n", resp.URL)
+ fmt.Printf("Metadata: %+v\n", resp.Metadata)
 }
 ```
 
