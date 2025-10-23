@@ -11,9 +11,6 @@
 package store
 
 import (
-	"github.com/ekilie/bucket-go/client"
-	"github.com/ekilie/bucket-go/model"
-	"github.com/ekilie/bucket-go/util"
 	"bytes"
 	"encoding/json"
 	"errors"
@@ -24,7 +21,10 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"time"
+
+	"../model"
+	"../client"
+	"../util"
 )
 
 // If baseURL is empty, it defaults to BaseURL.
