@@ -21,10 +21,6 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-
-	"../model"
-	"../client"
-	"../util"
 )
 
 // If baseURL is empty, it defaults to BaseURL.
