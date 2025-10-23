@@ -11,6 +11,9 @@
 package store
 
 import (
+	"github.com/ekilie/bucket-go/client"
+	"github.com/ekilie/bucket-go/model"
+	"github.com/ekilie/bucket-go/util"
 	"bytes"
 	"encoding/json"
 	"errors"
@@ -24,91 +27,12 @@ import (
 	"time"
 )
 
-// BaseURL is the default base URL for the Ekilie Bucket API.
-const BaseURL = "https://bucket.ekilie.com"
-
-// Endpoint is the API endpoint for file uploads.
-const Endpoint = "/api/store/v1/index.php"
-
-// MaxFileSize is the maximum allowed file size in bytes (100MB).
-const MaxFileSize = 100 * 1024 * 1024
-
-// AllowedExtensions is the set of allowed file extensions (lowercase).
-var AllowedExtensions = map[string]bool{
-	".jpg":   true,
-	".jpeg":  true,
-	".png":   true,
-	".gif":   true,
-	".webp":  true,
-	".svg":   true,
-	".pdf":   true,
-	".txt":   true,
-	".doc":   true,
-	".docx":  true,
-	".xls":   true,
-	".xlsx":  true,
-	".ppt":   true,
-	".pptx":  true,
-	".zip":   true,
-	".rar":   true,
-	".tar":   true,
-	".gz":    true,
-	".json":  true,
-	".xml":   true,
-}
-
-// Client is the API client for uploading files.
-type Client struct {
-	APIKey  string
-	BaseURL string
-	HTTP    *http.Client
-}
-
-// NewClient creates a new Client instance.
 // If baseURL is empty, it defaults to BaseURL.
-func NewClient(apiKey string, baseURL ...string) *Client {
-	url := BaseURL
-	if len(baseURL) > 0 && baseURL[0] != "" {
-		url = baseURL[0]
-	}
-	return &Client{
-		APIKey:  apiKey,
-		BaseURL: url,
-		HTTP:    &http.Client{Timeout: 30 * time.Second},
-	}
-}
-
-// UploadResponse represents the successful API response.
-type UploadResponse struct {
-	Status   string   `json:"status"`
-	URL      string   `json:"url"`
-	Metadata Metadata `json:"metadata"`
-}
-
-// Metadata contains file details.
-type Metadata struct {
-	OriginalName string `json:"original_name"`
-	FileType     string `json:"file_type"`
-	FileSize     int64  `json:"file_size"`
-	UploadTime   string `json:"upload_time"`
-}
-
-// ErrorResponse represents the error API response.
-type ErrorResponse struct {
-	Status  string `json:"status"`
-	Message string `json:"message"`
-}
+// ...existing code...
 
 // UploadFile uploads a file to the API and returns the response.
 func (c *Client) UploadFile(filePath string) (*UploadResponse, error) {
-	// Validate file existence and size
-	fileInfo, err := os.Stat(filePath)
-	if err != nil {
-		return nil, fmt.Errorf("failed to stat file: %w", err)
-	}
-	if fileInfo.Size() > MaxFileSize {
-		return nil, errors.New("file exceeds maximum size of 100MB")
-	}
+	// ...existing code...
 
 	// Validate extension
 	ext := strings.ToLower(filepath.Ext(filePath))
