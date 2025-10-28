@@ -19,6 +19,13 @@ var AllowedExtensions = map[string]bool{
 	".webp": true,
 	".svg":  true,
 
+	// Video formats
+	".mp4":  true,
+	".mov":  true,
+	".avi":  true,
+	".mkv":  true,
+	".webm": true,
+
 	// Documents
 	".pdf":  true,
 	".txt":  true,
@@ -30,10 +37,10 @@ var AllowedExtensions = map[string]bool{
 	".pptx": true,
 
 	// Archives
-	".zip":  true,
-	".rar":  true,
-	".tar":  true,
-	".gz":   true,
+	".zip": true,
+	".rar": true,
+	".tar": true,
+	".gz":  true,
 
 	// Data
 	".json": true,
@@ -48,5 +55,4 @@ var AllowedExtensions = map[string]bool{
 	".oga":  true,
 	".flac": true,
 	".opus": true,
-	".webm": true,
 }
